@@ -1,4 +1,4 @@
-# Mediqe
+# Mediqe 
 
 **Comprehensive Backend Platform for Healthcare & Medical Solutions**
 

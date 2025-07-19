@@ -8,7 +8,7 @@
 
 Mediqe is a modular, scalable backend system designed for healthcare applications, featuring robust user management, appointment scheduling, medical records, doctor-patient consultations, and admin/role-based dashboards. Built with modern Python/Django best practices and ready for production deployment.
 
----
+--- 
 
 ## 🏗 Applications Structure
 

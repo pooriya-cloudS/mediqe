@@ -8,6 +8,7 @@ on:
 
 jobs:
   test:
+    name: Django CI TEST
     runs-on: ubuntu-latest
 
     services:
@@ -56,7 +57,7 @@ jobs:
           done
 
       - name: Run migrations
-        run: python manage.py migrate
+        run: python appointment_mediqe/manage.py migrate
 
       - name: Run tests
-        run: python manage.py test
+        run: python appointment_mediqe/manage.py test

@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from .models import Schedule, Appointment
+from ..models import Schedule, Appointment
 from datetime import time
 import uuid
 

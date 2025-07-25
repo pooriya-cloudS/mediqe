@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from .models import MedicalRecord, Prescription, MedicalFile
+from ..models import MedicalRecord, Prescription, MedicalFile
 from datetime import date
 import uuid
 

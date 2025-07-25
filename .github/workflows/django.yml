@@ -10,6 +10,7 @@ jobs:
   test:
     name: Django CI TEST
     runs-on: ubuntu-latest
+    environment: team
 
     services:
       postgres:

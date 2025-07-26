@@ -12,8 +12,8 @@ class MedicalRecord(models.Model):
         ('Closed', 'Closed'),
         ('Archived', 'Archived'),
     ]
-   # patient = models.ForeignKey(User, on_delete=models.CASCADE)
-    #doctor = models.ForeignKey(User, on_delete=models.CASCADE)
+    patient = models.ForeignKey(User, on_delete=models.CASCADE,blank=True, null=True,related_name='patient_record')
+    doctor = models.ForeignKey(User, on_delete=models.CASCADE,related_name='doctor_record',blank=True, null=True)
     visit_reason = models.TextField(blank=True, null=True)
     diagnosis = models.TextField(blank=True, null=True)
     status = models.CharField(max_length=10, choices=STATUS_CHOICES, default='Open')

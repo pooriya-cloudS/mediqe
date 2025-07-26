@@ -19,7 +19,6 @@ jobs:
           POSTGRES_DB: ${{ secrets.DB_NAME }}
           POSTGRES_USER: ${{ secrets.DB_USER }}
 
-
           POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
         ports:
@@ -34,7 +33,6 @@ jobs:
       DB_ENGINE: ${{ secrets.DB_ENGINE }}
       DB_NAME: ${{ secrets.DB_NAME }}
       DB_USER: ${{ secrets.DB_USER }}
-
 
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 

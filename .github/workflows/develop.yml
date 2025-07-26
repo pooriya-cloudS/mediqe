@@ -65,4 +65,3 @@ jobs:
 
       - name: Run tests
         run: python appointment_mediqe/manage.py test
-

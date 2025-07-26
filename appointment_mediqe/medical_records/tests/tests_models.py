@@ -70,6 +70,7 @@ class MedicalFileTest(TestCase):
             description="Blood sugar report",       # Description of the file
             is_private=True                         # Whether the file is private
         )
+
         # Assert file type is correct
         self.assertEqual(file.type, "PDF")
         # Assert file size is correct

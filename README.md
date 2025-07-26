@@ -12,12 +12,20 @@ Mediqe is a modular, scalable backend system designed for healthcare application
 
 ## 🏗 Applications Structure
 
-- **accounts**: User authentication, registration, and role management (doctor, patient, admin)
-- **appointments**: Doctor time slot availability and patient booking system
-- **medical_records**: Secure storage/management of patient records, prescriptions, and medical files
-- **consultations**: Doctor-patient chat and asynchronous communication system
-- **dashboard**: Custom overview panels for admin, doctor, and patient activities
-- **common**: Shared utilities, abstract models, and signals
+**All the following are Django apps located in the `appointment_mediqe/` directory:**
+
+- **accounts** Handles user authentication, registration, permissions, and role management (doctor, patient, admin).
+- **appointment_mediqe** Main Django project configuration app (settings, URLs, WSGI/ASGI, etc.).
+- **appointments** Manages creation, scheduling, and tracking of doctor-patient appointments.
+- **chats** Implements chat functionality for real-time or asynchronous communication between patients and doctors.
+- **dashboards** Provides dashboards and summary views for various user roles (admin, doctor, patient).
+- **healthdatas** Handles the storage and retrieval of general health data for users (e.g., vitals, health history).
+- **medical_records** Manages secure storage of patient medical records, prescriptions, and related files.
+- **notifications** Sends notifications and system alerts to users (via email, push, or in-app).
+- **organizations** Manages healthcare organizations, clinics, and their relationships with users.
+- **payments** Handles payment processing, transaction history, and integration with payment gateways.
+
+All of these are Django applications and should be added to `INSTALLED_APPS` in your Django settings.
 
 ---
 

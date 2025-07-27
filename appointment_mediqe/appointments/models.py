@@ -61,7 +61,7 @@ class Appointment(models.Model):
         max_length=20, choices=STATUS_CHOICES, default="Pending"
     )  # Current status of the appointment
     created_by = models.ForeignKey(
-        User, on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE
     )  # User who created the appointment (could be doctor or admin)
     created_at = models.DateTimeField(
         auto_now_add=True

@@ -1,6 +1,6 @@
 from rest_framework import viewsets
-from ...models import Schedule
-from .serializers import ScheduleSerializer
+from ...models import Schedule, Appointment
+from .serializers import ScheduleSerializer, AppointmentSerializer
 from rest_framework.permissions import IsAuthenticated
 
 
@@ -18,3 +18,9 @@ class ScheduleViewSet(viewsets.ModelViewSet):
             return Schedule.objects.all()
         else:
             return Schedule.objects.filter(doctor=user)
+
+# ViewSet for Appointment providing full CRUD functionality
+class AppointmentViewSet(viewsets.ModelViewSet):
+    queryset = Appointment.objects.all()
+    serializer_class = AppointmentSerializer
+    permission_classes = [IsAuthenticated]

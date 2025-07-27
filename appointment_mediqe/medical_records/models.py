@@ -1,6 +1,7 @@
 import uuid
 from django.contrib.auth.models import User
 from django.db import models
+from django.conf import settings
 
 
 # MedicalRecord model to store patient medical history and visit details
@@ -14,14 +15,14 @@ class MedicalRecord(models.Model):
     ]
 
     patient = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         blank=True,
         null=True,
         related_name='patient_record'
     )  # Reference to the patient user
     doctor = models.ForeignKey(
-        User,
+        settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         blank=True,
         null=True,
@@ -69,7 +70,7 @@ class MedicalFile(models.Model):
         related_name='files'
     )  # Link to the related medical record
 
-    uploader = models.ForeignKey(User, on_delete=models.CASCADE)  # User who uploaded the file
+    uploader = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)  # User who uploaded the file
     file_path = models.CharField(max_length=200)                  # Path or URL to the file
     type = models.CharField(max_length=50)                        # Type of the file (e.g., "X-Ray", "Lab Report")
     size = models.IntegerField()                                  # File size in bytes

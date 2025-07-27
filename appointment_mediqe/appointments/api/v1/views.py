@@ -13,4 +13,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
     def get_queryset(self):
         # Limit the queryset to schedules belonging to the logged-in user (doctor)
         user = self.request.user
-        return Schedule.objects.filter(doctor=user)
+        if user.is_staff:
+            return Schedule.objects.all()
+        else:
+            return Schedule.objects.filter(doctor=user)

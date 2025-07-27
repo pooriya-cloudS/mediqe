@@ -57,5 +57,5 @@ class Appointment(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default='Pending')  # Current status of the appointment
     created_by = models.ForeignKey(User, on_delete=models.CASCADE)  # User who created the appointment (could be doctor or admin)
     created_at = models.DateTimeField(auto_now_add=True)  # Timestamp when the appointment was created
-    cancelled_at = models.DateTimeField(auto_now=True)  # Timestamp when the appointment was last updated (e.g., cancellation)
+    cancelled_at = models.DateTimeField(blank=True,null=True)  # Timestamp when the appointment was last updated (e.g., cancellation)
     notes = models.TextField(blank=True)  # Optional notes related to the appointment

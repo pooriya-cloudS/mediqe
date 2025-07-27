@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     'chats.apps.ChatsConfig',
     'payments.apps.PaymentsConfig',
     'dashboards.apps.DashboardsConfig',
-    'organizations.apps.OrganizationsConfig'
+    'organizations.apps.OrganizationsConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

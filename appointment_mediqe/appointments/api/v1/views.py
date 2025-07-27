@@ -3,6 +3,7 @@ from ...models import Schedule
 from .serializers import ScheduleSerializer
 from rest_framework.permissions import IsAuthenticated
 
+
 # ViewSet for Schedule providing full CRUD functionality
 # Only authenticated users can access these endpoints
 class ScheduleViewSet(viewsets.ModelViewSet):

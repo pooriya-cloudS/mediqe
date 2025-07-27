@@ -4,13 +4,14 @@ from rest_framework import status
 from django.contrib.auth.models import User
 from ..models import Schedule
 
+
 class ScheduleCRUDTestCase(APITestCase):
 
     def setUp(self):
         # Create a doctor user
-        self.doctor = User.objects.create_user(username='doctor1', password='pass123')
-        self.client.login(username='doctor1', password='pass123')
-        self.list_url = reverse('schedule-list')
+        self.doctor = User.objects.create_user(username="doctor1", password="pass123")
+        self.client.login(username="doctor1", password="pass123")
+        self.list_url = reverse("schedule-list")
 
         # Sample data for creating a Schedule
         self.schedule_data = {
@@ -19,7 +20,7 @@ class ScheduleCRUDTestCase(APITestCase):
             "start_time": "09:00:00",
             "end_time": "17:00:00",
             "location": "Clinic A",
-            "is_active": True
+            "is_active": True,
         }
 
     def test_create_schedule(self):
@@ -37,7 +38,7 @@ class ScheduleCRUDTestCase(APITestCase):
             start_time="10:00:00",
             end_time="15:00:00",
             location="Clinic B",
-            is_active=True
+            is_active=True,
         )
         # Test retrieving the list of schedules
         response = self.client.get(self.list_url)
@@ -52,16 +53,16 @@ class ScheduleCRUDTestCase(APITestCase):
             start_time="08:00:00",
             end_time="14:00:00",
             location="Clinic C",
-            is_active=True
+            is_active=True,
         )
-        detail_url = reverse('schedule-detail', args=[schedule.id])
+        detail_url = reverse("schedule-detail", args=[schedule.id])
         updated_data = {
             "doctor": self.doctor.id,
             "weekday": 2,
             "start_time": "09:00:00",
             "end_time": "16:00:00",
             "location": "Clinic Updated",
-            "is_active": False
+            "is_active": False,
         }
         # Test updating the schedule
         response = self.client.put(detail_url, updated_data)
@@ -78,9 +79,9 @@ class ScheduleCRUDTestCase(APITestCase):
             start_time="07:00:00",
             end_time="12:00:00",
             location="Clinic D",
-            is_active=True
+            is_active=True,
         )
-        detail_url = reverse('schedule-detail', args=[schedule.id])
+        detail_url = reverse("schedule-detail", args=[schedule.id])
         # Test deleting the schedule
         response = self.client.delete(detail_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)

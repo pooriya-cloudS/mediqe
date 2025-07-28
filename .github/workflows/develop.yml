@@ -1,14 +1,12 @@
-name: Django CI
+name: Django CI FOR DEVELOP TEAM
 
 on:
-  push:
-    branches: [develop]
   pull_request:
     branches: [develop]
 
 jobs:
   test:
-    name: Django CI TEST
+    name: Django CI TEST DEVELOP
     runs-on: ubuntu-latest
 
     services:
@@ -44,7 +42,10 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-
+          
+      - name: Format check with black
+        run: black --check .
+        
       - name: Install PostgreSQL client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
@@ -65,3 +66,12 @@ jobs:
 
       - name: Run tests
         run: python appointment_mediqe/manage.py test
+
+        
+      - name: Run tests with coverage
+        run: pytest --cov=./ --cov-report=xml --cov-report=term
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml

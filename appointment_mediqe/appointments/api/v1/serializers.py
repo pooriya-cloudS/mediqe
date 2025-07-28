@@ -9,24 +9,25 @@ class ScheduleSerializer(serializers.ModelSerializer):
         model = Schedule
         fields = "__all__"
 
+
 class AppointmentSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
         fields = "__all__"
-        read_only_fields = ['id', 'created_by', 'created_at', 'cancelled_at']
+        read_only_fields = ["id", "created_by", "created_at", "cancelled_at"]
+
     def create(self, validated_data):
-        validated_data['created_by'] = self.context['request'].user
+        validated_data["created_by"] = self.context["request"].user
         return super().create(validated_data)
 
 
 class AppointmentUpdateSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = ['appointment_time', 'schedule']
+        fields = ["appointment_time", "schedule"]
+
 
 class AppointmentStatusSerializer(serializers.ModelSerializer):
     class Meta:
         model = Appointment
-        fields = ['status']
-
-
+        fields = ["status"]

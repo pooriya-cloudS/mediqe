@@ -1,10 +1,15 @@
-from rest_framework import viewsets,generics
+from rest_framework import viewsets, generics
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from ...models import Schedule, Appointment
 from rest_framework.decorators import api_view, permission_classes
-from .serializers import ScheduleSerializer, AppointmentSerializer, AppointmentUpdateSerializer,AppointmentStatusSerializer
+from .serializers import (
+    ScheduleSerializer,
+    AppointmentSerializer,
+    AppointmentUpdateSerializer,
+    AppointmentStatusSerializer,
+)
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 
@@ -24,12 +29,12 @@ class ScheduleViewSet(viewsets.ModelViewSet):
         else:
             return Schedule.objects.filter(doctor=user)
 
+
 # ViewSet for Appointment providing full CRUD functionality
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated]
-
 
 
 # booking api (create)
@@ -78,12 +83,11 @@ class AppointmentRescheduleView(generics.UpdateAPIView):
 
     def perform_update(self, serializer):
         # Optionally update status to 'Pending'
-        serializer.save(status='Pending')
+        serializer.save(status="Pending")
 
-#update for status appointment
+
+# update for status appointment
 class AppointmentStatusUpdateView(generics.UpdateAPIView):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentStatusSerializer
     permission_classes = [IsAuthenticated]
-
-

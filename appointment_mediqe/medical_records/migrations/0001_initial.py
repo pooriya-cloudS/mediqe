@@ -16,43 +16,109 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='MedicalRecord',
+            name="MedicalRecord",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('visit_reason', models.TextField(blank=True, null=True)),
-                ('diagnosis', models.TextField(blank=True, null=True)),
-                ('status', models.CharField(choices=[('Open', 'Open'), ('Closed', 'Closed'), ('Archived', 'Archived')], default='Open', max_length=10)),
-                ('is_sensitive', models.BooleanField(default=False)),
-                ('created_at', models.DateTimeField(auto_now_add=True)),
-                ('updated_at', models.DateTimeField(auto_now=True)),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("visit_reason", models.TextField(blank=True, null=True)),
+                ("diagnosis", models.TextField(blank=True, null=True)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("Open", "Open"),
+                            ("Closed", "Closed"),
+                            ("Archived", "Archived"),
+                        ],
+                        default="Open",
+                        max_length=10,
+                    ),
+                ),
+                ("is_sensitive", models.BooleanField(default=False)),
+                ("created_at", models.DateTimeField(auto_now_add=True)),
+                ("updated_at", models.DateTimeField(auto_now=True)),
             ],
         ),
         migrations.CreateModel(
-            name='MedicalFile',
+            name="MedicalFile",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('file_path', models.CharField(max_length=200)),
-                ('type', models.CharField(max_length=50)),
-                ('size', models.IntegerField()),
-                ('description', models.TextField()),
-                ('uploaded_at', models.DateTimeField(auto_now_add=True)),
-                ('is_private', models.BooleanField(default=False)),
-                ('uploader', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
-                ('record', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='files', to='medical_records.medicalrecord')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("file_path", models.CharField(max_length=200)),
+                ("type", models.CharField(max_length=50)),
+                ("size", models.IntegerField()),
+                ("description", models.TextField()),
+                ("uploaded_at", models.DateTimeField(auto_now_add=True)),
+                ("is_private", models.BooleanField(default=False)),
+                (
+                    "uploader",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
+                (
+                    "record",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="files",
+                        to="medical_records.medicalrecord",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='Prescription',
+            name="Prescription",
             fields=[
-                ('id', models.UUIDField(default=uuid.uuid4, editable=False, primary_key=True, serialize=False)),
-                ('medication', models.CharField(max_length=100)),
-                ('dosage', models.CharField(max_length=100)),
-                ('instructions', models.TextField()),
-                ('start_date', models.DateField()),
-                ('end_date', models.DateField()),
-                ('renewable', models.BooleanField(default=False)),
-                ('status', models.CharField(choices=[('Active', 'Active'), ('Completed', 'Completed'), ('Cancelled', 'Cancelled')], default='Active', max_length=20)),
-                ('record', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='prescriptions', to='medical_records.medicalrecord')),
+                (
+                    "id",
+                    models.UUIDField(
+                        default=uuid.uuid4,
+                        editable=False,
+                        primary_key=True,
+                        serialize=False,
+                    ),
+                ),
+                ("medication", models.CharField(max_length=100)),
+                ("dosage", models.CharField(max_length=100)),
+                ("instructions", models.TextField()),
+                ("start_date", models.DateField()),
+                ("end_date", models.DateField()),
+                ("renewable", models.BooleanField(default=False)),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("Active", "Active"),
+                            ("Completed", "Completed"),
+                            ("Cancelled", "Cancelled"),
+                        ],
+                        default="Active",
+                        max_length=20,
+                    ),
+                ),
+                (
+                    "record",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="prescriptions",
+                        to="medical_records.medicalrecord",
+                    ),
+                ),
             ],
         ),
     ]

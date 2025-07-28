@@ -10,9 +10,9 @@ class MedicalRecordTest(TestCase):
         # Create a MedicalRecord instance with test data
         record = MedicalRecord.objects.create(
             visit_reason="Headache and dizziness",  # Reason for visit
-            diagnosis="Migraine",                    # Diagnosis given
-            status="Open",                           # Status of the medical record
-            is_sensitive=True                        # Mark the record as sensitive
+            diagnosis="Migraine",  # Diagnosis given
+            status="Open",  # Status of the medical record
+            is_sensitive=True,  # Mark the record as sensitive
         )
         # Assert the record ID is a valid UUID
         self.assertIsInstance(record.id, uuid.UUID)
@@ -35,14 +35,14 @@ class PrescriptionTest(TestCase):
     def test_create_prescription(self):
         # Create a Prescription linked to the MedicalRecord
         prescription = Prescription.objects.create(
-            record=self.record,                      # Link to medical record
-            medication="Losartan",                   # Medication name
-            dosage="50mg",                          # Dosage information
+            record=self.record,  # Link to medical record
+            medication="Losartan",  # Medication name
+            dosage="50mg",  # Dosage information
             instructions="Take once daily after breakfast",  # Usage instructions
-            start_date=date.today(),                 # Start date of prescription
-            end_date=date.today(),                   # End date of prescription
-            renewable=True,                         # Can this prescription be renewed?
-            status="Active"                         # Current status of prescription
+            start_date=date.today(),  # Start date of prescription
+            end_date=date.today(),  # End date of prescription
+            renewable=True,  # Can this prescription be renewed?
+            status="Active",  # Current status of prescription
         )
         # Assert medication name is correct
         self.assertEqual(prescription.medication, "Losartan")
@@ -62,13 +62,13 @@ class MedicalFileTest(TestCase):
     def test_create_medical_file(self):
         # Create a MedicalFile linked to a MedicalRecord and uploaded by a user
         file = MedicalFile.objects.create(
-            record=self.record,                       # Link to medical record
-            uploader=self.user,                       # User who uploaded the file
-            file_path="/media/files/report123.pdf", # Path or URL of the file
-            type="PDF",                              # File type
-            size=2048,                              # File size in bytes
-            description="Blood sugar report",       # Description of the file
-            is_private=True                         # Whether the file is private
+            record=self.record,  # Link to medical record
+            uploader=self.user,  # User who uploaded the file
+            file_path="/media/files/report123.pdf",  # Path or URL of the file
+            type="PDF",  # File type
+            size=2048,  # File size in bytes
+            description="Blood sugar report",  # Description of the file
+            is_private=True,  # Whether the file is private
         )
 
         # Assert file type is correct

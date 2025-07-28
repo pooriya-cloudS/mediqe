@@ -49,6 +49,10 @@ jobs:
       - name: Format check with black
         run: black --check .
 
+          
+      - name: Format check with black
+        run: black --check .
+        
       - name: Install PostgreSQL client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
@@ -73,6 +77,14 @@ jobs:
       - name: Run tests with coverage
         run: pytest --cov=./ --cov-report=xml --cov-report=term
 
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v3
+        with:
+          files: ./coverage.xml
+        
+      - name: Run tests with coverage
+        run: pytest --cov=./ --cov-report=xml --cov-report=term
+        
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:

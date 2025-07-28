@@ -1,0 +1,6 @@
+<h2>{{ view.object.pk|yesno:"ویرایش کاربر,ایجاد کاربر جدید" }}</h2>
+<form method="post" enctype="multipart/form-data">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">ذخیره</button>
+</form>

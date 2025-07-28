@@ -53,7 +53,7 @@ class User(models.Model):
     extra_info = models.JSONField(null=True, blank=True)
 
     # رشته‌ای که نمایش می‌دهد شیء این کلاس چه باشد
-    def str(self):
+    def __str__(self):
         return self.username
 
 
@@ -84,7 +84,7 @@ class UserProfile(models.Model):
     verified = models.BooleanField(default=False)
 
     # نمایش نام کاربر در قالب رشته
-    def str(self):
+    def __str__(self):
         return f"{self.user.username} Profile"
 
 
@@ -105,7 +105,7 @@ class AuditLog(models.Model):
     details = models.TextField()
 
     # رشته‌ای نمایش‌دهنده عملیات
-    def str(self):
+    def __str__(self):
         return f"{self.action} by {self.user}"
 
 
@@ -124,4 +124,7 @@ class Notification(models.Model):
     is_read = models.BooleanField(default=False)
     # تاریخ ساخت نوتیفیکیشن
     created_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.title} → {self.user}"
     

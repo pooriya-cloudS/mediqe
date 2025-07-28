@@ -1,15 +1,112 @@
 from rest_framework.test import APITestCase
-from django.urls import reverse
-from rest_framework import status
 from django.contrib.auth.models import User
-from ..models import Schedule
 import pytest
-from django.utils import timezone
-from django.contrib.auth import get_user_model
 from rest_framework.test import APIRequestFactory
 from appointments.api.v1.serializers import AppointmentSerializer
+from django.test import TestCase
+from django.urls import reverse
+from rest_framework.test import APIClient
+from rest_framework import status
+from datetime import time
+from django.utils import timezone
+from appointments.models import Appointment, Schedule
+from django.contrib.auth import get_user_model
 
 User = get_user_model()
+
+class AppointmentAPITestCase(TestCase):
+    def setUp(self):
+        self.client = APIClient()
+
+        # Create user and login
+        self.user = User.objects.create_user(username='testuser', password='12345')
+        self.client.login(username='testuser', password='12345')
+
+        # Create schedule (adapted to new model)
+        self.schedule = Schedule.objects.create(
+            doctor=self.user,
+            weekday=0,  # Monday
+            start_time=time(9, 0),
+            end_time=time(12, 0),
+            location="Clinic A",
+            is_active=True,
+        )
+
+        # Create appointment (adapted to new model)
+        self.appointment = Appointment.objects.create(
+            doctor=self.user,
+            patient=self.user,
+            schedule=self.schedule,
+            appointment_time=time(10, 0),
+            status='Pending',
+            created_by=self.user
+        )
+
+    # ✅ Test appointment creation
+    def test_create_appointment(self):
+        url = reverse('appointment-create')
+        data = {
+            'doctor': self.user.id,
+            'patient': self.user.id,
+            'schedule': str(self.schedule.id),
+            'appointment_time': '10:30:00'
+        }
+        response = self.client.post(url, data)
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data['status'], 'Pending')
+
+    # ✅ Retrieve appointment
+    def test_retrieve_appointment(self):
+        url = reverse('appointment-detail', kwargs={'pk': self.appointment.pk})
+        response = self.client.get(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data['id'], str(self.appointment.pk))
+
+    # ✅ Update appointment
+    def test_update_appointment_time(self):
+        url = reverse('appointment-detail', kwargs={'pk': self.appointment.pk})
+        response = self.client.patch(url, {'appointment_time': '11:00:00'}, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.appointment.refresh_from_db()
+        self.assertEqual(str(self.appointment.appointment_time), '11:00:00')
+
+    # ✅ Delete appointment
+    def test_delete_appointment(self):
+        url = reverse('appointment-detail', kwargs={'pk': self.appointment.pk})
+        response = self.client.delete(url)
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(Appointment.objects.filter(pk=self.appointment.pk).exists())
+
+    # ✅ Cancel appointment
+    def test_cancel_appointment(self):
+        url = reverse('appointment-cancel', kwargs={'pk': self.appointment.pk})
+        response = self.client.post(url)
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.appointment.refresh_from_db()
+        self.assertEqual(self.appointment.status, 'Cancelled')
+        self.assertIsNotNone(self.appointment.cancelled_at)
+
+    # ✅ Reschedule appointment
+    def test_reschedule_appointment(self):
+        url = reverse('appointment-reschedule', kwargs={'pk': self.appointment.pk})
+        data = {
+            'appointment_time': '11:30:00',
+            'schedule': str(self.schedule.id)
+        }
+        response = self.client.patch(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.appointment.refresh_from_db()
+        self.assertEqual(str(self.appointment.appointment_time), '11:30:00')
+        self.assertEqual(self.appointment.status, 'Pending')
+
+    # ✅ Update appointment status
+    def test_update_appointment_status(self):
+        url = reverse('appointment-status-update', kwargs={'pk': self.appointment.pk})
+        data = {'status': 'Completed'}
+        response = self.client.patch(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.appointment.refresh_from_db()
+        self.assertEqual(self.appointment.status, 'Completed')
 
 class ScheduleCRUDTestCase(APITestCase):
 

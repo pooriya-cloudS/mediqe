@@ -30,6 +30,7 @@ DEBUG = os.environ.get('DEBUG')
 
 ALLOWED_HOSTS = []
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -47,7 +48,7 @@ INSTALLED_APPS = [
     'chats.apps.ChatsConfig',
     'payments.apps.PaymentsConfig',
     'dashboards.apps.DashboardsConfig',
-    'organizations.apps.OrganizationsConfig'
+    'organizations.apps.OrganizationsConfig',
 ]
 
 MIDDLEWARE = [
@@ -76,6 +77,7 @@ TEMPLATES = [
         },
     },
 ]
+AUTH_USER_MODEL = 'accounts.User'
 
 WSGI_APPLICATION = 'appointment_mediqe.wsgi.application'
 

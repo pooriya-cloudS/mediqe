@@ -32,6 +32,7 @@ jobs:
       DB_HOST: localhost
       DB_PORT: 5432
       DJANGO_SETTINGS_MODULE: appointment_mediqe.settings
+      PYTHONPATH: appointment_mediqe
 
     steps:
       - uses: actions/checkout@v4
@@ -59,9 +60,11 @@ jobs:
         run: python appointment_mediqe/manage.py migrate
 
       - name: Run tests with coverage
-        run: pytest --cov=appointment_mediqe --cov-report=xml --cov-report=term
+        run: |
+          cd appointment_mediqe
+          pytest --cov=appointment_mediqe --cov-report=xml --cov-report=term
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3
         with:
-          files: ./coverage.xml
+          files: ./appointment_mediqe/coverage.xml

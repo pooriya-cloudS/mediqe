@@ -1,0 +1,11 @@
+<h2>{{ user.username }}</h2>
+<p>ایمیل: {{ user.email }}</p>
+<p>نام: {{ user.first_name }} {{ user.last_name }}</p>
+<p>نقش: {{ user.role }}</p>
+<p>تاریخ تولد: {{ user.date_of_birth }}</p>
+<p>جنسیت: {{ user.gender }}</p>
+<p>تلفن: {{ user.phone }}</p>
+<p>آدرس: {{ user.address }}</p>
+<img src="{{ user.avatar.url }}" width="100" alt="Avatar">
+<a href="{% url 'user_edit' user.id %}">ویرایش</a> |
+<a href="{% url 'user_delete' user.id %}">حذف</a>

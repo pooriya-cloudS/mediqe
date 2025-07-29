@@ -1,0 +1,7 @@
+<h2>حذف کاربر</h2>
+<p>آیا مطمئن هستید که می‌خواهید {{ user.username }} را حذف کنید؟</p>
+<form method="post">
+    {% csrf_token %}
+    <button type="submit">بله، حذف شود</button>
+</form>
+<a href="{% url 'user_list' %}">انصراف</a>

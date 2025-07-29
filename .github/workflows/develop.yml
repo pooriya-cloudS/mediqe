@@ -32,7 +32,7 @@ jobs:
       DB_HOST: localhost
       DB_PORT: 5432
       DJANGO_SETTINGS_MODULE: appointment_mediqe.settings
-      SECRET_KEY: 'django-insecure-test-secret-key'  # این مقدار رو متناسب با تست بزار
+      SECRET_KEY: 'django-insecure-test-secret-key'
 
     steps:
       - uses: actions/checkout@v4
@@ -59,11 +59,13 @@ jobs:
       - name: Run migrations
         run: python appointment_mediqe/manage.py migrate
 
+      - name: List appointments/tests directory
+        run: |
+          ls -l appointments/tests || echo "Directory not found!"
+
       - name: Run tests with coverage
         run: |
-      
-          cd appointment_mediqe
-          pytest ../appointments/tests --cov=appointments --cov-report=xml --cov-report=term
+          pytest appointments/tests --cov=appointments --cov-report=xml --cov-report=term
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

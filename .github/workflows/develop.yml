@@ -61,10 +61,7 @@ jobs:
           cd appointment_mediqe
           python manage.py migrate
 
-      - name: List tests directory (optional)
-        run: |
-          ls -l appointments/tests || echo "Directory not found!"
-
       - name: Run tests
         run: |
+          cd appointment_mediqe
           pytest

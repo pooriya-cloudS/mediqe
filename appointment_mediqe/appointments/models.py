@@ -46,7 +46,9 @@ class Appointment(models.Model):
         blank=True,
         null=True,
     )
-    schedule = models.ForeignKey(Schedule, on_delete=models.CASCADE, blank=True, null=True)
+    schedule = models.ForeignKey(
+        Schedule, on_delete=models.CASCADE, blank=True, null=True
+    )
     appointment_time = models.TimeField()
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="Pending")
     created_by = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)

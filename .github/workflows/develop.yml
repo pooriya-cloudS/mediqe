@@ -61,15 +61,13 @@ jobs:
           cd appointment_mediqe
           python manage.py migrate
 
-      - name: List appointment/tests directory
+      - name: List tests directory (optional)
         run: |
-          cd appointment_mediqe
-          ls -l appointment/tests || echo "Directory not found!"
+          ls -l appointments/tests || echo "Directory not found!"
 
       - name: Run tests with coverage
         run: |
-          cd appointment_mediqe
-          pytest appointment/tests --cov=appointment --cov-report=xml --cov-report=term
+          pytest --cov=appointment --cov-report=xml --cov-report=term
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v3

@@ -4,6 +4,7 @@ from django.db import models
 from django.conf import settings
 from django.utils import timezone
 
+
 # Represents a doctor's working schedule
 class Schedule(models.Model):
     # Primary key using UUID
@@ -30,6 +31,7 @@ class Schedule(models.Model):
 
     # Whether this schedule is currently active
     is_active = models.BooleanField(default=False)
+
 
 # Represents a patient appointment
 class Appointment(models.Model):

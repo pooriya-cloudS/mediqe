@@ -68,12 +68,5 @@ jobs:
         run: python appointment_mediqe/manage.py migrate
 
       - name: Run tests
+
         run: python appointment_mediqe/manage.py test
-        
-      - name: Run tests with coverage
-        run: pytest --cov=./ --cov-report=xml --cov-report=term
-        
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./coverage.xml

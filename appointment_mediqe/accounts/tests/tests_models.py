@@ -68,3 +68,4 @@ class UserProfileModelTest(TestCase):
 
     def test_str_representation(self):
         self.assertEqual(str(self.profile), "test@example.com Profile")
+#test

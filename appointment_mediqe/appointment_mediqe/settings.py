@@ -48,6 +48,7 @@ INSTALLED_APPS = [
     "payments.apps.PaymentsConfig",
     "dashboards.apps.DashboardsConfig",
     "organizations.apps.OrganizationsConfig",
+    "rest_framework",
 ]
 
 MIDDLEWARE = [

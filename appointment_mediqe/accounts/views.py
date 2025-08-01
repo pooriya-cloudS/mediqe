@@ -73,3 +73,8 @@ class LoginAPIView(APIView):
                 "email": user.email
             })
         return Response({"detail": "Invalid credentials"}, status=status.HTTP_401_UNAUTHORIZED)
+
+
+
+
+

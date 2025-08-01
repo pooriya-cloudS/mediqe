@@ -25,6 +25,7 @@ class UserModelTest(TestCase):
 
     def test_str_representation(self):
         self.assertEqual(str(self.user), 'test@example.com')
+        
 # accounts/tests/test_userprofile.py
 from django.test import TestCase
 from accounts.models import User, UserProfile

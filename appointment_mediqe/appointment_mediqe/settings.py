@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'payments.apps.PaymentsConfig',
     'dashboards.apps.DashboardsConfig',
     'organizations.apps.OrganizationsConfig',
+    'rest_framework',
 ]
 
 MIDDLEWARE = [
@@ -66,7 +67,9 @@ ROOT_URLCONF = 'appointment_mediqe.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
+        
         'DIRS': [],
+
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -116,6 +119,14 @@ AUTH_PASSWORD_VALIDATORS = [
         'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator',
     },
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_RENDERER_CLASSES': (
+        'rest_framework.renderers.JSONRenderer',
+        'rest_framework.renderers.BrowsableAPIRenderer',
+    )
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

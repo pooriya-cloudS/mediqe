@@ -2,6 +2,9 @@ from django.db import models
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 import uuid
+from django.db import models
+
+
 
 # Custom manager for User model
 class CustomUserManager(BaseUserManager):
@@ -44,7 +47,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     role = models.CharField(max_length=20, choices=ROLE_CHOICES)  # User role
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    date_of_birth = models.DateField()
+    date_of_birth = models.DateField(null=True, blank=True)
     gender = models.CharField(max_length=10, choices=GENDER_CHOICES)
     phone = models.CharField(max_length=20)
     address = models.TextField()
@@ -53,7 +56,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     is_verified = models.BooleanField(default=False)  # Email or account verified
     created_at = models.DateTimeField(auto_now_add=True)  # Created timestamp
     extra_info = models.JSONField(null=True, blank=True)  # Optional extra data
-
     is_staff = models.BooleanField(default=False)  # Can access admin site
 
     USERNAME_FIELD = 'email'  # Use email to log in
@@ -64,8 +66,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return self.email  # Show email as string representation
 
-from django.db import models
-from .models import User  # assuming User is in the same app
+  # assuming User is in the same app
 
 class UserProfile(models.Model):
     # Blood type choices

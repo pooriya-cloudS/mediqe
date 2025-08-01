@@ -1,0 +1,11 @@
+<!-- accounts/templates/accounts/notification_detail.html -->
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>{{ notification.title }}</h2>
+  <p><strong>Type:</strong> {{ notification.get_type_display }}</p>
+  <p><strong>Date:</strong> {{ notification.created_at|date:"Y-m-d H:i" }}</p>
+  <p>{{ notification.content }}</p>
+
+  <a href="{% url 'notification_list' %}">← Back to all notifications</a>
+{% endblock %}

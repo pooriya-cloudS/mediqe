@@ -30,11 +30,12 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('Admin', 'Admin'),
         ('Doctor', 'Doctor'),
         ('Patient', 'Patient'),
-       
+        ('Nurse', 'Nurse'),
+        ('Receptionist', 'Receptionist'),
     ]
 
     GENDER_CHOICES = [
-        ('Male', 'Male'),
+        ('Male', 'Male'), 
         ('Female', 'Female'),
         ('Other', 'Other'),
     ]

@@ -76,5 +76,7 @@ class LoginAPIView(APIView):
 
 
 
+git add .
+git commit -m "Initial push: add project files"
 
 

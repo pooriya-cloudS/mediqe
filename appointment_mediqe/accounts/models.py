@@ -30,8 +30,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         ('Admin', 'Admin'),
         ('Doctor', 'Doctor'),
         ('Patient', 'Patient'),
-        ('Nurse', 'Nurse'),
-        ('Receptionist', 'Receptionist'),
+       
     ]
 
     GENDER_CHOICES = [
@@ -44,7 +43,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=150)  # Optional username
     email = models.EmailField(unique=True)  # Unique email used for login
     password = models.CharField(max_length=128)  # Hashed password
-    role = models.CharField(max_length=20, choices=ROLE_CHOICES)  # User role
+    role = models.CharField(max_length=20, choices=ROLE_CHOICES,default='Patient')  # User role
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     date_of_birth = models.DateField(null=True, blank=True)

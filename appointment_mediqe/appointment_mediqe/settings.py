@@ -50,6 +50,7 @@ INSTALLED_APPS = [
     "dashboards.apps.DashboardsConfig",
     "organizations.apps.OrganizationsConfig",
     "rest_framework",
+
 ]
 
 MIDDLEWARE = [

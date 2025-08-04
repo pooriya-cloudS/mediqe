@@ -71,14 +71,5 @@ jobs:
         working-directory: ./appointment_mediqe
 
       - name: Run tests
-        run: python manage.py test
-        working-directory: ./appointment_mediqe
 
-      - name: Run tests with coverage
-        run: pytest --cov=./ --cov-report=xml --cov-report=term
-        working-directory: ./appointment_mediqe
-
-      - name: Upload coverage to Codecov
-        uses: codecov/codecov-action@v3
-        with:
-          files: ./appointment_mediqe/coverage.xml
+        run: python appointment_mediqe/manage.py test

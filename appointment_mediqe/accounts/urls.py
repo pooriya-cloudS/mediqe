@@ -9,13 +9,13 @@ from .views import (
 )
 
 router = DefaultRouter()
-router.register(r'users', UserViewSet)
-router.register(r'profiles', UserProfileViewSet)
+router.register(r"users", UserViewSet)
+router.register(r"profiles", UserProfileViewSet)
 
 urlpatterns = [
-    path('api/', include(router.urls)),
-    path('api/register/', RegisterAPIView.as_view(), name='register'),
-    path('api/login/', LoginAPIView.as_view(), name='login'),
-    path('login/', TokenObtainPairView.as_view(), name='token_obtain_pair'),
-    path('refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path("api/", include(router.urls)),
+    path("api/register/", RegisterAPIView.as_view(), name="register"),
+    path("api/login/", LoginAPIView.as_view(), name="login"),
+    path("login/", TokenObtainPairView.as_view(), name="token_obtain_pair"),
+    path("refresh/", TokenRefreshView.as_view(), name="token_refresh"),
 ]

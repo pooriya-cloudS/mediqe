@@ -1,4 +1,3 @@
-
 # accounts/models.py
 import uuid
 from django.db import models
@@ -7,10 +6,12 @@ from django.conf import settings
 
 # === Audit Log Model ===
 class AuditLog(models.Model):
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Unique identifier for each log entry
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='audit_logs')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="audit_logs"
+    )
     # The user who performed the action
 
     action = models.CharField(max_length=255)
@@ -35,16 +36,18 @@ class AuditLog(models.Model):
 # === Notification Model ===
 class Notification(models.Model):
     NOTIFICATION_TYPES = [
-        ('APPOINTMENT', 'Appointment'),
-        ('MESSAGE', 'Message'),
-        ('PAYMENT', 'Payment'),
-        ('SYSTEM', 'System'),
+        ("APPOINTMENT", "Appointment"),
+        ("MESSAGE", "Message"),
+        ("PAYMENT", "Payment"),
+        ("SYSTEM", "System"),
     ]
 
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     # Unique ID for the notification
 
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='notifications')
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name="notifications"
+    )
     # The recipient user of the notification
 
     type = models.CharField(max_length=20, choices=NOTIFICATION_TYPES)
@@ -64,4 +67,3 @@ class Notification(models.Model):
 
     def __str__(self):
         return f"{self.user.email} - {self.type} - {self.title}"
-

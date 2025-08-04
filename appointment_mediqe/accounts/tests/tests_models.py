@@ -3,33 +3,36 @@ from models import User
 from uuid import uuid4
 from datetime import date
 
+
 class UserModelTest(TestCase):
     def setUp(self):
         self.user = User.objects.create(
             id=uuid4(),
-            username='testuser',
-            email='test@example.com',
-            password='pass1234',
-            role='Patient',
-            first_name='Test',
-            last_name='User',
+            username="testuser",
+            email="test@example.com",
+            password="pass1234",
+            role="Patient",
+            first_name="Test",
+            last_name="User",
             date_of_birth=date(1990, 1, 1),
-            gender='Male',
-            phone='09123456789',
-            address='Test Address',
+            gender="Male",
+            phone="09123456789",
+            address="Test Address",
         )
 
     def test_user_created(self):
-        self.assertEqual(self.user.username, 'testuser')
+        self.assertEqual(self.user.username, "testuser")
         self.assertTrue(self.user.is_active)
 
     def test_str_representation(self):
-        self.assertEqual(str(self.user), 'test@example.com')
-        
+        self.assertEqual(str(self.user), "test@example.com")
+
+
 # accounts/tests/test_userprofile.py
 from django.test import TestCase
 from accounts.models import User, UserProfile
 from datetime import date
+
 
 class UserProfileModelTest(TestCase):
     def setUp(self):
@@ -43,7 +46,7 @@ class UserProfileModelTest(TestCase):
             date_of_birth=date(1990, 5, 15),
             gender="Male",
             phone="09123456789",
-            address="Tehran"
+            address="Tehran",
         )
 
         self.profile = UserProfile.objects.create(
@@ -57,7 +60,7 @@ class UserProfileModelTest(TestCase):
             bio="Experienced skin specialist",
             years_experience=8,
             rating=4.7,
-            verified=True
+            verified=True,
         )
 
     def test_profile_creation(self):

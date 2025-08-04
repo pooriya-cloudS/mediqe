@@ -1,0 +1,23 @@
+<!-- accounts/templates/accounts/auditlog_list.html -->
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Audit Logs</h2>
+
+  <!-- Loop through each audit log -->
+  <ul>
+    {% for log in logs %}
+      <li>
+        <strong>{{ log.timestamp|date:"Y-m-d H:i" }}</strong> - 
+        <em>{{ log.user.email }}</em> performed 
+        <strong>{{ log.action }}</strong> on 
+        <code>{{ log.target }}</code>
+        <br>
+        <small>IP: {{ log.ip_address }}</small><br>
+        {{ log.details }}
+      </li>
+    {% empty %}
+      <li>No audit logs available.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

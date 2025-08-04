@@ -30,6 +30,7 @@ DEBUG = os.environ.get("DEBUG")
 
 ALLOWED_HOSTS = []
 
+
 # Application definition
 
 INSTALLED_APPS = [
@@ -48,6 +49,8 @@ INSTALLED_APPS = [
     "payments.apps.PaymentsConfig",
     "dashboards.apps.DashboardsConfig",
     "organizations.apps.OrganizationsConfig",
+    "rest_framework",
+
 ]
 
 MIDDLEWARE = [
@@ -76,6 +79,7 @@ TEMPLATES = [
         },
     },
 ]
+AUTH_USER_MODEL = "accounts.User"
 
 WSGI_APPLICATION = "appointment_mediqe.wsgi.application"
 
@@ -114,6 +118,14 @@ AUTH_PASSWORD_VALIDATORS = [
         "NAME": "django.contrib.auth.password_validation.NumericPasswordValidator",
     },
 ]
+
+REST_FRAMEWORK = {
+    "DEFAULT_RENDERER_CLASSES": (
+        "rest_framework.renderers.JSONRenderer",
+        "rest_framework.renderers.BrowsableAPIRenderer",
+    )
+}
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/

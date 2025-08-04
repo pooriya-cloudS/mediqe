@@ -1,8 +1,12 @@
 name: Django CI FOR DEVELOP TEAM
 
+
 on:
+  push:
+     branches: [develop]
   pull_request:
-    branches: [develop]
+     branches: [develop]
+
 
 jobs:
   test:

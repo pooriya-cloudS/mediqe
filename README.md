@@ -77,7 +77,7 @@ All of these are Django applications and should be added to `INSTALLED_APPS` in 
 **Week 6: Dashboard & Finishing Touches**
 - Role-based dashboards for admin, doctors, patients
 - Final testing, docs, and deployment preparation
-
+#.
 ---
 
 ## 👥 Team Structure

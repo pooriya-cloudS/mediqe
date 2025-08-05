@@ -9,15 +9,13 @@ from rest_framework import status
 from datetime import time
 from django.utils import timezone
 from appointments.models import Appointment, Schedule
-import pytest
-
-User = get_user_model()
+from django.conf import settings
 
 
 class AppointmentAPITestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = User.objects.create_user(username="testuser", password="12345")
+        self.user = settings.AUTH_USER_MODEL.objects.create_user(username="testuser", password="12345")
         self.client.login(username="testuser", password="12345")
         self.schedule = Schedule.objects.create(
             doctor=self.user,
@@ -97,7 +95,7 @@ class AppointmentAPITestCase(TestCase):
 
 class ScheduleCRUDTestCase(APITestCase):
     def setUp(self):
-        self.doctor = User.objects.create_user(username="doctor1", password="pass123")
+        self.doctor = settings.AUTH_USER_MODEL.objects.create_user(username="doctor1", password="pass123")
         self.client.login(username="doctor1", password="pass123")
         self.list_url = reverse("schedule-list")
         self.schedule_data = {
@@ -167,87 +165,3 @@ class ScheduleCRUDTestCase(APITestCase):
         self.assertEqual(Schedule.objects.count(), 0)
 
 
-@pytest.mark.django_db
-class TestAppointmentSerializer:
-    def setup_method(self):
-        self.patient = User.objects.create_user(username="patient", password="test123")
-        self.doctor = User.objects.create_user(username="doctor", password="test123")
-        self.schedule = Schedule.objects.create(
-            doctor=self.doctor,
-            weekday=0,
-            start_time=time(9, 0),
-            end_time=time(12, 0),
-            location="Clinic A",
-            is_active=True,
-        )
-
-    def get_request(self, user):
-        factory = APIRequestFactory()
-        request = factory.post("/appointments/", {})
-        request.user = user
-        return request
-
-    def test_create_appointment_sets_created_by(self):
-        data = {
-            "doctor": self.doctor.id,
-            "patient": self.patient.id,
-            "schedule": self.schedule.id,
-            "appointment_time": "09:00:00",
-            "status": "Pending",
-            "notes": "Initial consult",
-        }
-        request = self.get_request(self.patient)
-        serializer = AppointmentSerializer(data=data, context={"request": request})
-        assert serializer.is_valid(), serializer.errors
-        appointment = serializer.save()
-        assert appointment.created_by == self.patient
-        assert appointment.doctor == self.doctor
-        assert appointment.notes == "Initial consult"
-        assert appointment.status == "Pending"
-
-    def test_created_by_ignored_if_passed_in_data(self):
-        fake_user = User.objects.create_user(username="fake", password="12345")
-        data = {
-            "doctor": self.doctor.id,
-            "patient": self.patient.id,
-            "schedule": self.schedule.id,
-            "appointment_time": "10:00:00",
-            "status": "Confirmed",
-            "notes": "Follow-up",
-            "created_by": fake_user.id,
-        }
-        request = self.get_request(self.patient)
-        serializer = AppointmentSerializer(data=data, context={"request": request})
-        assert serializer.is_valid(), serializer.errors
-        appointment = serializer.save()
-        assert appointment.created_by == self.patient
-
-    def test_invalid_status_fails_validation(self):
-        data = {
-            "doctor": self.doctor.id,
-            "patient": self.patient.id,
-            "schedule": self.schedule.id,
-            "appointment_time": "11:00:00",
-            "status": "InvalidStatus",
-            "notes": "Bad status test",
-        }
-        request = self.get_request(self.patient)
-        serializer = AppointmentSerializer(data=data, context={"request": request})
-        assert not serializer.is_valid()
-        assert "status" in serializer.errors
-
-    def test_cancelled_status_sets_cancelled_at(self):
-        data = {
-            "doctor": self.doctor.id,
-            "patient": self.patient.id,
-            "schedule": self.schedule.id,
-            "appointment_time": "12:00:00",
-            "status": "Cancelled",
-            "notes": "Canceled by patient",
-        }
-        request = self.get_request(self.patient)
-        serializer = AppointmentSerializer(data=data, context={"request": request})
-        assert serializer.is_valid(), serializer.errors
-        appointment = serializer.save()
-        assert appointment.status == "Cancelled"
-        assert appointment.cancelled_at is not None

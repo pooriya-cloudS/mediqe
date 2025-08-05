@@ -82,7 +82,6 @@ class AppointmentRescheduleView(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
 
     def perform_update(self, serializer):
-        # Optionally update status to 'Pending'
         serializer.save(status="Pending")
 
 

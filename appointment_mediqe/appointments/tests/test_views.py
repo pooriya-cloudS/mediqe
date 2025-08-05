@@ -15,7 +15,9 @@ from django.conf import settings
 class AppointmentAPITestCase(TestCase):
     def setUp(self):
         self.client = APIClient()
-        self.user = settings.AUTH_USER_MODEL.objects.create_user(username="testuser", password="12345")
+        self.user = settings.AUTH_USER_MODEL.objects.create_user(
+            username="testuser", password="12345"
+        )
         self.client.login(username="testuser", password="12345")
         self.schedule = Schedule.objects.create(
             doctor=self.user,
@@ -95,7 +97,9 @@ class AppointmentAPITestCase(TestCase):
 
 class ScheduleCRUDTestCase(APITestCase):
     def setUp(self):
-        self.doctor = settings.AUTH_USER_MODEL.objects.create_user(username="doctor1", password="pass123")
+        self.doctor = settings.AUTH_USER_MODEL.objects.create_user(
+            username="doctor1", password="pass123"
+        )
         self.client.login(username="doctor1", password="pass123")
         self.list_url = reverse("schedule-list")
         self.schedule_data = {
@@ -163,5 +167,3 @@ class ScheduleCRUDTestCase(APITestCase):
         response = self.client.delete(detail_url)
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(Schedule.objects.count(), 0)
-
-

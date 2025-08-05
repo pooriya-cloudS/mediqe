@@ -83,7 +83,6 @@ WSGI_APPLICATION = "appointment_mediqe.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# new Database config postgreSQl
 DATABASES = {
     "default": {
         "ENGINE": os.environ.get("DB_ENGINE"),
@@ -135,6 +134,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "staticfiles")
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = os.path.join(BASE_DIR, "mediafiles")
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.2/ref/settings/#default-auto-field
 

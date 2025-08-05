@@ -19,15 +19,3 @@ class AppointmentSerializer(serializers.ModelSerializer):
     def create(self, validated_data):
         validated_data["created_by"] = self.context["request"].user
         return super().create(validated_data)
-
-
-class AppointmentUpdateSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Appointment
-        fields = ["appointment_time", "schedule"]
-
-
-class AppointmentStatusSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Appointment
-        fields = ["status"]

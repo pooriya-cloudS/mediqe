@@ -7,8 +7,6 @@ from rest_framework.decorators import api_view, permission_classes
 from .serializers import (
     ScheduleSerializer,
     AppointmentSerializer,
-    AppointmentUpdateSerializer,
-    AppointmentStatusSerializer,
 )
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
@@ -31,62 +29,56 @@ class ScheduleViewSet(viewsets.ModelViewSet):
 
 
 # ViewSet for Appointment providing full CRUD functionality
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
+from django.utils import timezone
+from rest_framework.permissions import IsAuthenticated
+
+
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated]
 
-
-# booking api (create)
-class AppointmentCreateView(generics.CreateAPIView):
-    queryset = Appointment.objects.all()
-    serializer_class = AppointmentSerializer
-    permission_classes = [IsAuthenticated]
-
     def perform_create(self, serializer):
-        # Automatically set the user who created the appointment
         serializer.save(created_by=self.request.user)
 
+    # cancel appointment
+    @action(detail=True, methods=["post"])
+    def cancel(self, request, pk=None):
+        appointment = self.get_object()
+        if appointment.status == "Cancelled":
+            return Response(
+                {"detail": "Appointment already cancelled."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-#  Retrieve, Update, or Delete an appointment
-class AppointmentDetailView(generics.RetrieveUpdateDestroyAPIView):
-    queryset = Appointment.objects.all()
-    serializer_class = AppointmentSerializer
-    permission_classes = [IsAuthenticated]
-
-
-#  Cancel an appointment (custom logic)
-class AppointmentCancelView(APIView):
-
-    permission_classes = [IsAuthenticated]
-
-    def post(self, request, pk):
-        try:
-            appointment = Appointment.objects.get(pk=pk)
-        except Appointment.DoesNotExist:
-            return Response({"error": "Appointment not found"}, status=404)
-
-        # Update status and log cancellation time
         appointment.status = "Cancelled"
         appointment.cancelled_at = timezone.now()
         appointment.save()
+        return Response({"detail": "Appointment cancelled successfully."})
 
-        return Response({"message": "Appointment cancelled successfully"}, status=200)
-
-
-# Reschedule an existing appointment
-class AppointmentRescheduleView(generics.UpdateAPIView):
-
-    queryset = Appointment.objects.all()
-    serializer_class = AppointmentUpdateSerializer
-    permission_classes = [IsAuthenticated]
-
-    def perform_update(self, serializer):
+    # reschedule appointment
+    @action(detail=True, methods=["post"])
+    def reschedule(self, request, pk=None):
+        appointment = self.get_object()
+        serializer = self.get_serializer(appointment, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
         serializer.save(status="Pending")
+        return Response(serializer.data)
 
+    # update status appointment
+    @action(detail=True, methods=["post"])
+    def update_status(self, request, pk=None):
+        appointment = self.get_object()
+        status_value = request.data.get("status")
+        if not status_value:
+            return Response(
+                {"detail": "Status field is required."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
-# update for status appointment
-class AppointmentStatusUpdateView(generics.UpdateAPIView):
-    queryset = Appointment.objects.all()
-    serializer_class = AppointmentStatusSerializer
-    permission_classes = [IsAuthenticated]
+        appointment.status = status_value
+        appointment.save()
+        return Response({"detail": "Status updated successfully."})

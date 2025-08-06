@@ -69,7 +69,7 @@ All of these are Django applications and should be added to `INSTALLED_APPS` in 
 **Week 4: Medical Records Module**
 - Models: MedicalRecord, Prescription, UploadedFile
 - Secure file uploads and access control
-
+   
 **Week 5: Consultations System**
 - Real-time/asynchronous chat logic (messages, file attachments)
 - APIs for sending/receiving patient-doctor messages

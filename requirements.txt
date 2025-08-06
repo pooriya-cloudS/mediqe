@@ -8,3 +8,4 @@ black==24.4.2
 pytest
 pytest-cov
 pytest-django
+drf-spectacular

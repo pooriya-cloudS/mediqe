@@ -41,8 +41,9 @@ class AppointmentViewSetTestCase(TestCase):
         )
 
     def test_cancel_appointment(self):
-        url = reverse("appointments-cancel", args=[self.appointment.id])
-        response = self.client.post(url)
+        url = reverse("appointments-update-appointment", args=[self.appointment.id])
+        data = {"action": "cancel"}
+        response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.appointment.refresh_from_db()
@@ -53,19 +54,21 @@ class AppointmentViewSetTestCase(TestCase):
         self.appointment.status = "Cancelled"
         self.appointment.save()
 
-        url = reverse("appointments-cancel", args=[self.appointment.id])
-        response = self.client.post(url)
+        url = reverse("appointments-update-appointment", args=[self.appointment.id])
+        data = {"action": "cancel"}
+        response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("already cancelled", response.data["detail"].lower())
 
     def test_reschedule_appointment(self):
-        url = reverse("appointments-reschedule", args=[self.appointment.id])
+        url = reverse("appointments-update-appointment", args=[self.appointment.id])
         new_time = timezone.now().time()
         data = {
+            "action": "reschedule",
             "appointment_time": new_time.isoformat(),
             "schedule": str(self.schedule.id),
         }
-        response = self.client.post(url, data, format="json")
+        response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.appointment.refresh_from_db()
@@ -75,22 +78,42 @@ class AppointmentViewSetTestCase(TestCase):
         )
 
     def test_reschedule_missing_fields(self):
-        url = reverse("appointments-reschedule", args=[self.appointment.id])
-        data = {"appointment_time": timezone.now().time().isoformat()}
-        response = self.client.post(url, data, format="json")
+        url = reverse("appointments-update-appointment", args=[self.appointment.id])
+        data = {
+            "action": "reschedule",
+            # "schedule" is missing here
+            "appointment_time": timezone.now().time().isoformat(),
+        }
+        response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("schedule", response.data)
 
     def test_update_status(self):
-        url = reverse("appointments-update-status", args=[self.appointment.id])
-        response = self.client.post(url, {"status": "Confirmed"})
+        url = reverse("appointments-update-appointment", args=[self.appointment.id])
+        data = {"action": "update_status", "status": "Confirmed"}
+        response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_200_OK)
 
         self.appointment.refresh_from_db()
         self.assertEqual(self.appointment.status, "Confirmed")
 
     def test_update_status_missing(self):
-        url = reverse("appointments-update-status", args=[self.appointment.id])
-        response = self.client.post(url, {})
+        url = reverse("appointments-update-appointment", args=[self.appointment.id])
+        data = {"action": "update_status"}  # status missing
+        response = self.client.put(url, data, format="json")
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
         self.assertIn("detail", response.data)
+
+    def test_missing_action_field(self):
+        url = reverse("appointments-update-appointment", args=[self.appointment.id])
+        data = {}  # no action field
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("detail", response.data)
+
+    def test_unknown_action_field(self):
+        url = reverse("appointments-update-appointment", args=[self.appointment.id])
+        data = {"action": "unknown_action"}
+        response = self.client.put(url, data, format="json")
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("unknown action", response.data["detail"].lower())

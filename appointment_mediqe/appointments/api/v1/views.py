@@ -1,13 +1,11 @@
-from rest_framework import viewsets, generics
-from rest_framework.response import Response
-from rest_framework.views import APIView
-
 from ...models import Schedule, Appointment
-from rest_framework.decorators import api_view, permission_classes
 from .serializers import (
     ScheduleSerializer,
     AppointmentSerializer,
 )
+from rest_framework import viewsets, status
+from rest_framework.decorators import action
+from rest_framework.response import Response
 from django.utils import timezone
 from rest_framework.permissions import IsAuthenticated
 
@@ -29,13 +27,6 @@ class ScheduleViewSet(viewsets.ModelViewSet):
 
 
 # ViewSet for Appointment providing full CRUD functionality
-from rest_framework import viewsets, status
-from rest_framework.decorators import action
-from rest_framework.response import Response
-from django.utils import timezone
-from rest_framework.permissions import IsAuthenticated
-
-
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
@@ -44,41 +35,52 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
-    # cancel appointment
-    @action(detail=True, methods=["post"])
-    def cancel(self, request, pk=None):
+    @action(detail=True, methods=["put"])
+    def update_appointment(self, request, pk=None):
         appointment = self.get_object()
-        if appointment.status == "Cancelled":
+        action_type = request.data.get("action")
+
+        if not action_type:
             return Response(
-                {"detail": "Appointment already cancelled."},
+                {"detail": "Missing 'action' field in request."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        appointment.status = "Cancelled"
-        appointment.cancelled_at = timezone.now()
-        appointment.save()
-        return Response({"detail": "Appointment cancelled successfully."})
+        # Cancel
+        if action_type == "cancel":
+            if appointment.status == "Cancelled":
+                return Response(
+                    {"detail": "Appointment already cancelled."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            appointment.status = "Cancelled"
+            appointment.cancelled_at = timezone.now()
+            appointment.save()
+            return Response({"detail": "Appointment cancelled successfully."})
 
-    # reschedule appointment
-    @action(detail=True, methods=["post"])
-    def reschedule(self, request, pk=None):
-        appointment = self.get_object()
-        serializer = self.get_serializer(appointment, data=request.data, partial=True)
-        serializer.is_valid(raise_exception=True)
-        serializer.save(status="Pending")
-        return Response(serializer.data)
+        # Reschedule
+        elif action_type == "reschedule":
+            serializer = self.get_serializer(
+                appointment, data=request.data, partial=True
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save(status="Pending")
+            return Response(serializer.data)
 
-    # update status appointment
-    @action(detail=True, methods=["post"])
-    def update_status(self, request, pk=None):
-        appointment = self.get_object()
-        status_value = request.data.get("status")
-        if not status_value:
+        # Update Status
+        elif action_type == "update_status":
+            status_value = request.data.get("status")
+            if not status_value:
+                return Response(
+                    {"detail": "Status field is required for status update."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
+            appointment.status = status_value
+            appointment.save()
+            return Response({"detail": "Status updated successfully."})
+
+        else:
             return Response(
-                {"detail": "Status field is required."},
+                {"detail": f"Unknown action '{action_type}'."},
                 status=status.HTTP_400_BAD_REQUEST,
             )
-
-        appointment.status = status_value
-        appointment.save()
-        return Response({"detail": "Status updated successfully."})

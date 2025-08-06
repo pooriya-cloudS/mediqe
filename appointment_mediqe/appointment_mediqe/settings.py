@@ -48,7 +48,7 @@ INSTALLED_APPS = [
     "payments.apps.PaymentsConfig",
     "dashboards.apps.DashboardsConfig",
     "organizations.apps.OrganizationsConfig",
-    "rest_framework",
+
 ]
 REST_FRAMEWORK = {
     "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",

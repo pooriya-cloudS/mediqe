@@ -9,7 +9,7 @@ from django.contrib.auth.models import (
 import uuid
 
 
-# === Custom User Manager === 
+# === Custom User Manager ===
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         """
@@ -48,7 +48,9 @@ class User(AbstractBaseUser, PermissionsMixin):
         ("Other", "Other"),
     ]
 
-    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)  # Unique ID
+    id = models.UUIDField(
+        primary_key=True, default=uuid.uuid4, editable=False
+    )  # Unique ID
     username = models.CharField(max_length=150)
     email = models.EmailField(unique=True)
     password = models.CharField(max_length=128)  # Hashed password
@@ -69,17 +71,17 @@ class User(AbstractBaseUser, PermissionsMixin):
     # === Avoid reverse accessor conflicts with Django default User ===
     groups = models.ManyToManyField(
         Group,
-        related_name='custom_user_set',
+        related_name="custom_user_set",
         blank=True,
-        help_text='Groups this user belongs to.',
-        verbose_name='groups',
+        help_text="Groups this user belongs to.",
+        verbose_name="groups",
     )
     user_permissions = models.ManyToManyField(
         Permission,
-        related_name='custom_user_set',
+        related_name="custom_user_set",
         blank=True,
-        help_text='Permissions specific to this user.',
-        verbose_name='user permissions',
+        help_text="Permissions specific to this user.",
+        verbose_name="user permissions",
     )
 
     # Use email as the login field
@@ -92,14 +94,23 @@ class User(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         return f"{self.email} ({self.role})"
 
+
 # === User Profile Model ===
 class UserProfile(models.Model):
     BLOOD_TYPES = [
-        ("A+", "A+"), ("A-", "A-"), ("B+", "B+"), ("B-", "B-"),
-        ("AB+", "AB+"), ("AB-", "AB-"), ("O+", "O+"), ("O-", "O-"),
+        ("A+", "A+"),
+        ("A-", "A-"),
+        ("B+", "B+"),
+        ("B-", "B-"),
+        ("AB+", "AB+"),
+        ("AB-", "AB-"),
+        ("O+", "O+"),
+        ("O-", "O-"),
     ]
 
-    user = models.OneToOneField(User, on_delete=models.CASCADE, related_name="profile")  # Link to custom user
+    user = models.OneToOneField(
+        User, on_delete=models.CASCADE, related_name="profile"
+    )  # Link to custom user
     insurance_number = models.CharField(max_length=50)  # Insurance ID
     insurance_company = models.CharField(max_length=100)  # Name of insurance provider
     blood_type = models.CharField(max_length=3, choices=BLOOD_TYPES)

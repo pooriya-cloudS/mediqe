@@ -29,7 +29,7 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 DEBUG = os.environ.get("DEBUG")
 
 ALLOWED_HOSTS = []
-AUTH_USER_MODEL = 'accounts.User'
+AUTH_USER_MODEL = "accounts.User"
 
 # Application definition
 
@@ -49,7 +49,6 @@ INSTALLED_APPS = [
     "payments.apps.PaymentsConfig",
     "dashboards.apps.DashboardsConfig",
     "organizations.apps.OrganizationsConfig",
-
 ]
 
 MIDDLEWARE = [

@@ -10,9 +10,6 @@ from django.utils import timezone
 import uuid
 
 
-
-
-
 class UserModelTest(TestCase):
     def test_create_regular_user(self):
         """Test creating a regular user with email and password"""
@@ -24,7 +21,7 @@ class UserModelTest(TestCase):
             last_name="Doe",
             gender="Male",
             phone="1234567890",
-            address="123 Street"
+            address="123 Street",
         )
 
         self.assertEqual(user.email, "userr@example.com")
@@ -37,8 +34,7 @@ class UserModelTest(TestCase):
     def test_create_superuser(self):
         """Test creating a superuser"""
         admin = User.objects.create_superuser(
-            email="adminn@example.com",
-            password="adminpassword"
+            email="adminn@example.com", password="adminpassword"
         )
 
         self.assertEqual(admin.email, "adminn@example.com")
@@ -72,7 +68,7 @@ class UserProfileModelTest(TestCase):
             last_name="Smith",
             gender="Female",
             phone="111222333",
-            address="456 Street"
+            address="456 Street",
         )
 
     def test_create_user_profile(self):

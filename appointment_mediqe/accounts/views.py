@@ -2,8 +2,6 @@
 from rest_framework import viewsets
 from .models import User, UserProfile
 from .serializers import UserSerializer, UserProfileSerializer
-
-
 class UserViewSet(viewsets.ModelViewSet):
     """
     API endpoint that allows users to be viewed or edited.

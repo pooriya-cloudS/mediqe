@@ -9,7 +9,7 @@ from django.contrib.auth.models import (
 import uuid
 
 
-# === Custom User Manager ===
+# === Custom User Manager === 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
         """

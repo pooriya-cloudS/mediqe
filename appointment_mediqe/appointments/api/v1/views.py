@@ -8,9 +8,8 @@ from ...models import Schedule, Appointment
 from .serializers import ScheduleSerializer, AppointmentSerializer
 
 
-
 @extend_schema(
-    tags=['Schedule'],
+    tags=["Schedule"],
     summary="Manage Doctor Schedules",
     description="""
     This API allows you to list, create, update, and delete doctor schedules.
@@ -36,7 +35,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
 
 
 @extend_schema(
-    tags=['Appointment'],
+    tags=["Appointment"],
     summary="Manage Appointments",
     description="""
     This API allows listing, creating, updating, and deleting appointments.
@@ -62,7 +61,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
         user = self.request.user
         if user.is_staff:
             return Appointment.objects.all()
-        elif hasattr(user, 'role') and user.role == "doctor":
+        elif hasattr(user, "role") and user.role == "doctor":
             return Appointment.objects.filter(doctor=user)
         else:
             return Appointment.objects.filter(patient=user)
@@ -73,7 +72,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     @extend_schema(
         summary="Update Appointment Status",
         description="To change the status, send 'action'='update_status' and the 'status' field.",
-        responses={200: OpenApiResponse(description="Status updated successfully")}
+        responses={200: OpenApiResponse(description="Status updated successfully")},
     )
     @action(detail=True, methods=["put"])
     def update_appointment(self, request, pk=None):
@@ -82,12 +81,18 @@ class AppointmentViewSet(viewsets.ModelViewSet):
 
         action_type = request.data.get("action")
         if not action_type:
-            return Response({"detail": "Missing 'action' field in request."}, status=status.HTTP_400_BAD_REQUEST)
+            return Response(
+                {"detail": "Missing 'action' field in request."},
+                status=status.HTTP_400_BAD_REQUEST,
+            )
 
         if action_type == "update_status":
             status_value = request.data.get("status")
             if not status_value:
-                return Response({"detail": "Status field is required for status update."}, status=status.HTTP_400_BAD_REQUEST)
+                return Response(
+                    {"detail": "Status field is required for status update."},
+                    status=status.HTTP_400_BAD_REQUEST,
+                )
 
             if appointment.status == "Cancelled" and status_value != "Cancelled":
                 appointment.cancelled_at = None
@@ -99,4 +104,7 @@ class AppointmentViewSet(viewsets.ModelViewSet):
             appointment.save()
             return Response({"detail": "Status updated successfully."})
 
-        return Response({"detail": f"Unknown action '{action_type}'."}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(
+            {"detail": f"Unknown action '{action_type}'."},
+            status=status.HTTP_400_BAD_REQUEST,
+        )

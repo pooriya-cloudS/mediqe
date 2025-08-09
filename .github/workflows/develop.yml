@@ -56,6 +56,14 @@ jobs:
       - name: Install PostgreSQL client
         run: sudo apt-get update && sudo apt-get install -y postgresql-client
 
+      - name: Format check with black
+        run: |
+            pip install black
+            black --check .
+
+      - name: Install PostgreSQL client
+        run: sudo apt-get update && sudo apt-get install -y postgresql-client
+
       - name: Wait for DB
         run: |
           until pg_isready -h localhost -p 5432 -U postgres; do
@@ -67,4 +75,5 @@ jobs:
         run: python appointment_mediqe/manage.py migrate
 
       - name: Run tests
+
         run: python appointment_mediqe/manage.py test

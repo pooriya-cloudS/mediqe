@@ -32,6 +32,15 @@ class AppointmentViewSet(viewsets.ModelViewSet):
     serializer_class = AppointmentSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        user = self.request.user
+        if user.is_staff:
+            return Appointment.objects.all()
+        elif user.role == "doctor":
+            return Appointment.objects.filter(doctor=user)
+        else:
+            return Appointment.objects.filter(patient=user)
+
     def perform_create(self, serializer):
         serializer.save(created_by=self.request.user)
 
@@ -46,30 +55,12 @@ class AppointmentViewSet(viewsets.ModelViewSet):
                 status=status.HTTP_400_BAD_REQUEST,
             )
 
-        # Cancel
-        if action_type == "cancel":
-            if appointment.status == "Cancelled":
-                return Response(
-                    {"detail": "Appointment already cancelled."},
-                    status=status.HTTP_400_BAD_REQUEST,
-                )
-            appointment.status = "Cancelled"
-            appointment.cancelled_at = timezone.now()
-            appointment.save()
-            return Response({"detail": "Appointment cancelled successfully."})
-
-        # Reschedule
-        elif action_type == "reschedule":
-            serializer = self.get_serializer(
-                appointment, data=request.data, partial=True
-            )
-            serializer.is_valid(raise_exception=True)
-            serializer.save(status="Pending")
-            return Response(serializer.data)
-
         # Update Status
         elif action_type == "update_status":
             status_value = request.data.get("status")
+            if appointment.status == "Cancelled":
+                appointment.cancelled_at = timezone.now()
+                appointment.save()
             if not status_value:
                 return Response(
                     {"detail": "Status field is required for status update."},

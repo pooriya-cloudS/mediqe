@@ -12,9 +12,7 @@ class MedicalFileUploadView(generics.CreateAPIView):
     permission_classes = [permissions.IsAuthenticated]
 
     def perform_create(self, serializer):
-        # Get the medical record ID from the request data
         record_id = self.request.data.get("record")
-        # Retrieve the medical record or return 404 if not found
         record = get_object_or_404(MedicalRecord, id=record_id)
 
         # Allow upload only if the user is the patient or the doctor of the record

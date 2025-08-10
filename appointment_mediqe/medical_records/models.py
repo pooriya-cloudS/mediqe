@@ -49,6 +49,12 @@ class MedicalRecord(models.Model):
 
 # Prescription model to store medication prescribed in a medical record
 class Prescription(models.Model):
+    appointment = models.ForeignKey(
+        "appointments.Appointment",
+        on_delete=models.CASCADE,
+        null=True,
+        related_name="prescription",
+    )
     STATUS_CHOICES = [
         ("Active", "Active"),  # Prescription is currently active
         ("Completed", "Completed"),  # Prescription course completed

@@ -11,7 +11,7 @@ class MedicalFileSerializer(serializers.ModelSerializer):
             "id",
             "record",
             "uploader",
-            "file",
+            "file_path",
             "type",
             "description",
             "uploaded_at",

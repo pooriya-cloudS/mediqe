@@ -5,6 +5,7 @@ from drf_spectacular.utils import extend_schema, OpenApiResponse
 from rest_framework.decorators import action
 from django.utils import timezone
 from ...models import Schedule, Appointment
+from .permissions import *
 from .serializers import ScheduleSerializer, AppointmentSerializer
 
 
@@ -25,7 +26,7 @@ from .serializers import ScheduleSerializer, AppointmentSerializer
 class ScheduleViewSet(viewsets.ModelViewSet):
     queryset = Schedule.objects.all()
     serializer_class = ScheduleSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, AccessViewSchedule]
 
     def get_queryset(self):
         user = self.request.user
@@ -55,7 +56,7 @@ class ScheduleViewSet(viewsets.ModelViewSet):
 class AppointmentViewSet(viewsets.ModelViewSet):
     queryset = Appointment.objects.all()
     serializer_class = AppointmentSerializer
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated, AccessViewAppointment]
 
     def get_queryset(self):
         user = self.request.user

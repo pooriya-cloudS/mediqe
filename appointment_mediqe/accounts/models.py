@@ -9,6 +9,8 @@ from django.contrib.auth.models import (
 import uuid
 
 from .managers import CustomUserManager
+
+
 # === Custom User Model ===
 class User(AbstractBaseUser, PermissionsMixin):
     ROLE_CHOICES = [

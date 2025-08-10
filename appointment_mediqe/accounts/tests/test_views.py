@@ -1,13 +1,12 @@
 import os
 import django
-
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "appointment_mediqe.settings")
-django.setup()
-
 from django.test import TestCase
 from accounts.models import User, UserProfile
 from django.utils import timezone
 import uuid
+
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "appointment_mediqe.settings")  # Set default Django settings module
+django.setup()  # Initialize Django applications and settings
 
 
 class UserModelTest(TestCase):

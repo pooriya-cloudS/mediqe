@@ -5,7 +5,8 @@ from .models import User, UserProfile
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
-        exclude = ["password"]  # Exclude password from being displayed
+        fields = "__all__"
+        extra_kwargs = {"password": {"write_only": True}}  # Writing , unreadable
 
     def create(self, validated_data):
         # Pop the password and hash it manually
